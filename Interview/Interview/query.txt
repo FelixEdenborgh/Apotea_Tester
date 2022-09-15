@@ -1,0 +1,1 @@
+select data1.zip_code, data1.order_date, data1.order_number, data1.first_name, data1.last_name, data2.sku_id,data2.quantity,data2.price, data3.article_name, data3.[weight] from data1,data2,data3 where data3.sku_id=data2.sku_id and data2.order_number=data1.order_number
