@@ -53,45 +53,7 @@ namespace Interview
 
             // Test 2:
 
-
-            string connetionString;
-            connetionString = @"Data Source=FELIX-PC\SQLEXPRESS;Initial Catalog=Apotea;Integrated Security=True";
-            
-
-
-            SqlConnection cnn = new SqlConnection(connetionString);
-            SqlCommand command = new SqlCommand("SELECT data1.zip_code as ZipCode, data1.order_number as OrderNumber, data2.sku_id as SkuID, data2.quantity as Quantity, data2.price as Price, data3.[weight] as Weight FROM data1,data2,data3 where data3.sku_id=data2.sku_id and data2.order_number=data1.order_number and data1.order_date >= Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,current_timestamp)), 0) order by zip_code desc\r\n\r\n", cnn);
-            cnn.Open();
-            var dataReader = command.ExecuteReader();
-
-
-            var list = new List<mylist>();
-
-            Int16 p = 0;
-            int oldZip = 0;
-            int Length_A;
-
-            while (dataReader.Read())
-            {
-                if (oldZip == 0) { oldZip = (int)dataReader["ZipCode"]; }
-                if ((int)dataReader["ZipCode"] == oldZip)
-                {
-                    p += (Int16)dataReader["Price"];
-                }
-                else
-                {
-                    Console.WriteLine(oldZip + " - " + p);
-                    p = 0;
-                    oldZip = (int)dataReader["ZipCode"];
-                    p += (Int16)dataReader["Price"];
-                    
-                }
-                list.Add(new mylist { zip = oldZip, price = p });
-            }
-
-            List<mylist> sorted = list.OrderBy(x => x.price).ToList();
-            Console.WriteLine(sorted);
-
+            GetWeightAndPriceForTopRegions();
         }
 
         public class mylist
@@ -104,6 +66,20 @@ namespace Interview
 
         public static void GetWeightAndPriceForTopRegions()
         {
+            string connetionString;
+            connetionString = @"Data Source=FELIX-PC\SQLEXPRESS;Initial Catalog=Apotea;Integrated Security=True";
+
+         
+            SqlConnection cnn = new SqlConnection(connetionString);
+            SqlCommand command = new SqlCommand("select ZipCode, shipping_method_id, AVG(Price) as Average_Price, AVG([Weight]) as Average_Weight, SUM(Quantity) as Totaly_Orders from tempT group by ZipCode, shipping_method_id order by Totaly_Orders desc", cnn);
+            cnn.Open();
+            var dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                Console.WriteLine(dataReader["ZipCode"] + " - " + dataReader["shipping_method_id"] + " - " + dataReader["Average_Price"] + " - " + dataReader["Average_Weight"] + " - " + dataReader["Totaly_Orders"]);
+
+            }
 
         }
 

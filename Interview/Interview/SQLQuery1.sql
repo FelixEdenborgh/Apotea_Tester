@@ -94,3 +94,6 @@ SELECT data1.zip_code as ZipCode, data1.order_date as OrderDate, data1.order_num
 FROM data1,data2,data3 
 where data3.sku_id=data2.sku_id and data2.order_number=data1.order_number and data1.order_date >= Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,current_timestamp)), 0) 
 order by zip_code 
+
+
+Select * from tempTable2 order by ZipCode desc
