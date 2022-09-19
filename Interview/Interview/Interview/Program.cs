@@ -56,13 +56,6 @@ namespace Interview
             GetWeightAndPriceForTopRegions();
         }
 
-        public class mylist
-        {
-            public int zip { get; set; }
-            public Int16 price { get; set; }
-        }
-
-        
 
         public static void GetWeightAndPriceForTopRegions()
         {
